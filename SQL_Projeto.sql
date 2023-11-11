@@ -30,7 +30,7 @@ PRIMARY KEY (users_id, projects_id)
 GO
 
 ALTER TABLE USERS
-DROP CONSTRAINT UQ__USERS__9AFF8FC60ECE65BB;
+DROP CONSTRAINT UQ__USERS__9AFF8FC6906B34F3;
 
 ALTER TABLE USERS
 ALTER COLUMN usuario VARCHAR(10) NOT NULL;
@@ -44,7 +44,7 @@ GO
 INSERT INTO USERS(nome,usuario, senha, email)
 VALUES('Paulo' , 'Ti_paulo' , '123@456' , 'paulo@empresa.com')
 GO
-INSERT INTO USERS(nome,usuario, email)
+INSERT INTO USERS(nome, usuario, email)
 VALUES('Ana' , 'Rh_ana' , 'ana@empresa.com')
 GO
 INSERT INTO USERS(nome, usuario, email)
@@ -128,3 +128,28 @@ CONVERT(VARCHAR, p.datinha, 103),
 DATEDIFF(DAY, p.datinha, '2014-09-16') * 79.85 AS total_cost
 FROM PROJECTS AS p 
 WHERE p.nome LIKE 'Manutenção%'
+
+--------------------------------------------------------------------------
+
+INSERT INTO USERS(nome,usuario, email)
+VALUES('Joao' , 'Ti_joao' , 'joao@empresa.com')
+GO
+
+INSERT INTO PROJECTS(nome, descricao ,datinha)
+VALUES('Atualização de Sistemas' , 'Modificação de Sistemas Operacionais nos PC' , '12/09/2014')
+GO
+
+SELECT u.id_users, u.nome, u.email,
+		p.id_projects, p.nome, p.descricao, p.datinha
+FROM USERS AS u, projects AS p, PROJECTS_USERS AS pu
+WHERE u.id_users = pu.users_id AND p.id_projects = pu.projects_id AND p.nome = 'Re-Folha' 
+
+SELECT p.nome
+FROM PROJECTS p
+LEFT JOIN PROJECTS_USERS AS pu ON p.id_projects = pu.projects_id
+WHERE pu.users_id IS NULL
+
+SELECT u.nome
+FROM USERS u
+LEFT JOIN PROJECTS_USERS AS pu ON u.id_users = pu.users_id
+WHERE pu.projects_id IS NULL
